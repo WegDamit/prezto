@@ -12,3 +12,31 @@ fi
 
 # Customize to your needs...
 
+if [[ "$TERM" == "xterm" ]]; then
+    export TERM=xterm-256color
+fi
+
+bindkey ';5D' emacs-backward-word
+bindkey ';5C' emacs-forward-word
+
+PATH=$HOME/bin:.:$PATH
+
+# Show history
+if [ "$HIST_STAMPS" = "mm/dd/yyyy" ]
+then
+    alias history='fc -fl 1'
+elif [ "$HIST_STAMPS" = "dd.mm.yyyy" ]
+then
+    alias history='fc -El 1'
+elif [ "$HIST_STAMPS" = "yyyy-mm-dd" ]
+then
+    alias history='fc -il 1'
+else
+    alias history='fc -l 1'
+fi
+
+# List direcory contents
+alias lsa='ls -lah'
+alias l='ls -lah'
+alias ll='ls -lah'
+alias la='ls -lAh'
