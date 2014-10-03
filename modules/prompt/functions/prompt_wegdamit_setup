@@ -72,7 +72,8 @@ function build_prompt {
   # prompt_segment blue black '%2~'
   prompt_segment blue black '${_prompt_sorin_pwd}'
   # [[ -n ${git_info:+true} ]] && prompt_segment green black '${git_info:+${(e)git_info[prompt]}}%(!. %B%F{red}#%f%b.)'
-  [[ -n ${git_info:+true} ]] && prompt_segment green black '${(e)git_info[prompt]}%(!. %B%F{red}#%f%b.)'
+  # [[ -n ${git_info:+true} ]] && prompt_segment green black '${(e)git_info[prompt]}%(!. %B%F{red}#%f%b.)'
+  [[ -n ${git_info:+true} ]] && prompt_segment green black '${(e)git_info[prompt]}'
 
   prompt_end
 }
