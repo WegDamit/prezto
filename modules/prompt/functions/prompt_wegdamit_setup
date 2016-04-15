@@ -6,6 +6,7 @@ CURRENT_BG='NONE'
 # SEGMENT_SEPARATOR='►'
 # SEGMENT_SEPARATOR='%{%1G%}'
 SEGMENT_SEPARATOR=$'\uE0B0'
+BRANCH_SYMBOL=$'\uE0A0'
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -27,7 +28,7 @@ prompt_segment() {
 
 prompt_segment_bleak() {
     print -n "$SEGMENT_SEPARATOR"
-    [[ -n $3 ]] && print -Pn $3
+    [[ -n $1 ]] && print -Pn $1
 }
 
 # End the prompt, closing any open segments
@@ -74,6 +75,7 @@ function build_prompt {
   # [[ -n ${git_info:+true} ]] && prompt_segment green black '${git_info:+${(e)git_info[prompt]}}%(!. %B%F{red}#%f%b.)'
   # [[ -n ${git_info:+true} ]] && prompt_segment green black '${(e)git_info[prompt]}%(!. %B%F{red}#%f%b.)'
   [[ -n ${git_info:+true} ]] && prompt_segment green black '${(e)git_info[prompt]}'
+  # [[ -n ${git_info:+true} ]] && prompt_segment_bleak '${(e)git_info[prompt]}'
 
   prompt_end
 }
@@ -122,7 +124,6 @@ function prompt_wegdamit_precmd {
     git-info
   fi
 
-  prompt_sorin_pwd
 }
 
 function prompt_wegdamit_setup {
@@ -168,13 +169,13 @@ function prompt_wegdamit_setup {
   zstyle ':prezto:module:git:info:added' format ' %%B%F{green}✚%f%%b'
   zstyle ':prezto:module:git:info:ahead' format ' %%B%F{yellow}⬆%f%%b'
   zstyle ':prezto:module:git:info:behind' format ' %%B%F{yellow}⬇%f%%b'
-  # zstyle ':prezto:module:git:info:branch' format ':%F{blue}⬅ %b%f'
-  zstyle ':prezto:module:git:info:branch' format '⬅ %b'
-  # ⬅←
+  #zstyle ':prezto:module:git:info:branch' format ':%F{blue}⬅ %b%f'
+  zstyle ':prezto:module:git:info:branch' format ' ${BRANCH_SYMBOL} %{%f%%b}'
+  # ⬅⬅←
   zstyle ':prezto:module:git:info:commit' format ':%F{blue}%.7c%f'
   zstyle ':prezto:module:git:info:deleted' format ' %%B%F{red}✖%f%%b'
   zstyle ':prezto:module:git:info:modified' format ' %%B%F{blue}✱%f%%b'
-  # zstyle ':prezto:module:git:info:position' format ':%F{red}%p%f'
+  zstyle ':prezto:module:git:info:position' format ':%F{red}%p%f'
   zstyle ':prezto:module:git:info:position' format '%p'
   zstyle ':prezto:module:git:info:renamed' format ' %%B%F{magenta}➜%f%%b'
   zstyle ':prezto:module:git:info:stashed' format ' %%B%F{cyan}✭%f%%b'
@@ -184,14 +185,20 @@ function prompt_wegdamit_setup {
     'rprompt' '%A%B%S%a%d%m%r%U%u' \
     'prompt' '$(coalesce "%b" "%p" "%c")%s'
 
-
+ 
   # Define prompts.
   PROMPT='%{%f%b%k%}$(build_prompt) '
+  # PROMPT='%B%F{black}${SSH_TTY:+%m:}%F{cyan}${_prompt_mp_pwd}%f${git_info:+${(e)git_info[prompt]}}%(!. %B%F{red}#%f%b.)${editor_info[keymap]} '
   # PROMPT='%{%K{black}%}%{%F{default}%} ✘ %{%K{blue}%F{black}%}%{%F{black}%} ${_prompt_sorin_pwd} %{%k%F{blue}%}%{%f%}'
 
   # RPROMPT='[%D{%L:%M:%S %p}]'
   RPROMPT='${editor_info[overwrite]}%(?::%F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_info[rprompt]}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
+
+
+# Initialize colors.
+autoload -U colors
+colors
 
 prompt_wegdamit_setup "$@"
